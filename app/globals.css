@@ -1,0 +1,184 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-gray-900 transition-colors duration-300;
+  }
+
+  html.dark body {
+    @apply bg-dark-950 text-white;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* Light mode styles */
+  html[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  html[data-theme="light"] body {
+    @apply bg-white text-gray-900;
+  }
+
+  html[data-theme="light"] .glass-card {
+    @apply bg-gray-100/50 border-gray-200/50;
+  }
+
+  html[data-theme="light"] .glass-card-hover {
+    @apply bg-gray-100/50 border-gray-200/50 hover:bg-gray-100 hover:border-neon-cyan/30;
+  }
+
+  html[data-theme="light"] .gradient-text-primary {
+    @apply bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  html[data-theme="light"] .gradient-text-secondary {
+    @apply bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent;
+  }
+
+  html[data-theme="light"] .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:shadow-lg hover:shadow-blue-500/50;
+  }
+
+  html[data-theme="light"] .btn-secondary {
+    @apply border-blue-600 text-blue-600 hover:bg-blue-600/10 hover:shadow-lg hover:shadow-blue-500/30;
+  }
+
+  html[data-theme="light"] .btn-ghost {
+    @apply text-gray-600 hover:text-blue-600 hover:bg-gray-100;
+  }
+
+  html[data-theme="light"] .skill-badge {
+    @apply bg-gray-100 border-gray-200 hover:bg-gray-200 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20;
+  }
+
+  html[data-theme="light"] .glow-border {
+    @apply border-blue-500/30 shadow-lg shadow-blue-500/20;
+  }
+
+  html[data-theme="light"] .timeline-dot {
+    @apply bg-blue-600 shadow-lg shadow-blue-600/50;
+  }
+
+  html[data-theme="light"] .timeline-line {
+    @apply bg-gradient-to-b from-blue-600 to-transparent;
+  }
+
+  html[data-theme="light"] ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  html[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+  }
+
+  html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.5);
+  }
+
+  html[data-theme="light"] ::selection {
+    @apply bg-blue-500/30 text-gray-900;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl;
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:bg-white/10 hover:border-neon-cyan/50 hover:shadow-lg hover:shadow-neon-cyan/20;
+  }
+
+  .gradient-text-primary {
+    @apply bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text text-transparent;
+  }
+
+  .gradient-text-secondary {
+    @apply bg-gradient-to-r from-neon-blue to-neon-cyan bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply px-8 py-3 rounded-lg font-semibold bg-gradient-to-r from-neon-cyan to-neon-blue text-dark-950 transition-all duration-300 hover:shadow-lg hover:shadow-neon-cyan/50 hover:scale-105 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3 rounded-lg font-semibold border-2 border-neon-cyan text-neon-cyan transition-all duration-300 hover:bg-neon-cyan/10 hover:shadow-lg hover:shadow-neon-cyan/30 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply px-6 py-2 rounded-lg font-medium text-gray-300 transition-all duration-300 hover:text-neon-cyan hover:bg-white/5;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20;
+  }
+
+  .smooth-fade-in {
+    @apply animate-fade-in;
+  }
+
+  .smooth-slide-up {
+    @apply animate-slide-in-up;
+  }
+
+  .glow-border {
+    @apply border border-neon-cyan/30 shadow-lg shadow-neon-cyan/20;
+  }
+
+  .skill-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium transition-all duration-300 hover:bg-white/10 hover:border-neon-cyan/50 hover:shadow-lg hover:shadow-neon-cyan/20;
+  }
+
+  .project-card {
+    @apply glass-card-hover p-6 group;
+  }
+
+  .timeline-dot {
+    @apply w-4 h-4 rounded-full bg-neon-cyan shadow-lg shadow-neon-cyan/50 absolute left-0 top-0;
+  }
+
+  .timeline-line {
+    @apply absolute left-2 top-8 w-0.5 h-full bg-gradient-to-b from-neon-cyan to-transparent;
+  }
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 15, 30, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.5);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Selection styling */
+::selection {
+  @apply bg-neon-cyan/30 text-white;
+}
