@@ -17,13 +17,14 @@ export const useInView = (options = {}) => {
       }
     }, { threshold: 0.1, ...options });
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const node = ref.current;
+    if (node) {
+      observer.observe(node);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (node) {
+        observer.unobserve(node);
       }
     };
   }, [options]);
@@ -82,18 +83,24 @@ export const useScrollPosition = () => {
  * Hook to detect if user prefers reduced motion
  */
 export const usePrefersReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const getInitial = () => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  };
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(getInitial);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (e) => {
-      setPrefersReducedMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    const handleChange = (e) => setPrefersReducedMotion(e.matches);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else {
+      // Fallback for older browsers
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
   }, []);
 
   return prefersReducedMotion;
@@ -110,6 +117,8 @@ export const useActiveSection = (sectionIds = [], options = {}) => {
 
   useEffect(() => {
     if (!sectionIds?.length) return;
+
+    const observed = observedRef.current;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -160,8 +169,8 @@ export const useActiveSection = (sectionIds = [], options = {}) => {
           next = { id: homeId, ratio: 1, top: 0 };
         }
 
-        if (next && next.id && next.id !== active) {
-          setActive(next.id);
+        if (next && next.id) {
+          setActive((curr) => (curr !== next.id ? next.id : curr));
         }
       },
       {
@@ -175,11 +184,11 @@ export const useActiveSection = (sectionIds = [], options = {}) => {
 
     const tryAttach = () => {
       sectionIds.forEach((id) => {
-        if (observedRef.current.has(id)) return;
+        if (observed.has(id)) return;
         const el = document.getElementById(id);
         if (el) {
           observer.observe(el);
-          observedRef.current.add(id);
+          observed.add(id);
         }
       });
     };
@@ -196,11 +205,10 @@ export const useActiveSection = (sectionIds = [], options = {}) => {
     return () => {
       observer.disconnect();
       mo.disconnect();
-      observer.disconnect();
       stateRef.current = {};
-      observedRef.current.clear();
+      observed.clear();
     };
-  }, [sectionIds.join('|')]);
+  }, [sectionIds, options]);
 
   return active;
 };

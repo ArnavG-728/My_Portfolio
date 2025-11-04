@@ -46,34 +46,19 @@ const NavigationDock = () => {
     clearTimerRef.current = setTimeout(() => setForcedId(null), 1200);
   };
 
-  // Clear forced id once the observer reports the same section
+  // Cleanup timer on unmount
   useEffect(() => {
-    if (forcedId && activeSectionId === forcedId) {
-      setForcedId(null);
+    return () => {
       if (clearTimerRef.current) {
         clearTimeout(clearTimerRef.current);
         clearTimerRef.current = null;
       }
-    }
-  }, [activeSectionId, forcedId]);
+    };
+  }, []);
 
   const effectiveActiveId = forcedId || activeSectionId || 'home';
 
-  // Force "home" when at absolute top of the page
-  useEffect(() => {
-    const onScrollTopCheck = () => {
-      if (typeof window !== 'undefined') {
-        if (window.scrollY <= 1) {
-          setForcedId('home');
-        } else if (forcedId === 'home') {
-          setForcedId(null);
-        }
-      }
-    };
-    window.addEventListener('scroll', onScrollTopCheck, { passive: true });
-    onScrollTopCheck();
-    return () => window.removeEventListener('scroll', onScrollTopCheck);
-  }, [forcedId]);
+  
 
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block" role="navigation" aria-label="Primary Navigation">
